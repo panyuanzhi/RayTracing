@@ -10,7 +10,8 @@ Ray::Ray(Point3 start, Point3 end)
 Ray::Ray(Point3 point, Vector3 direction)
 {
 	mOrigin = point;
-	mDirction = direction.Normalize();
+	direction.Normalize();
+	mDirction = direction;
 }
 
 Ray::~Ray()

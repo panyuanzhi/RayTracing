@@ -9,6 +9,7 @@ Camera::Camera( float focalLength, float imageWidth, float imageHeight, int reso
 	mResolutionY = resolutionY;
 	mBounce = 4;
 	InitColorBuffer();
+	mEye[0] = 0; mEye[1] = 0; mEye[2] = 0;
 }
 
 Camera::~Camera()
@@ -53,7 +54,12 @@ RGBColor Camera::RayTracing(Ray ray, const Scene & scene, int bounce)
 		RGBColor color = object->ka*scene.mAmbient.GetIrradiance(position);
 		//暂时先写单光源情况
 		{
-			Ray shadowRay = scene.mDirLight.GetShadowRay(position);
+			Ray ray = scene.mDirLight.GetShadowRay(position);
+			//由于数值精度问题，求解的交点不一定精确的在物体表面上，会有一定的偏离。
+			//有可能会在在物体内部，或在物体外部，因此对阴影光线沿射线方向做一定的便偏移。
+			float epsilon = 0.001;
+			Point3 point =  ray.GetPoint(epsilon);
+			Ray shadowRay(point, ray.GetDirection());
 			Point3 shadowPoint;
 			Object *shadowObject = scene.Hit(shadowRay,shadowPoint);
 			if (shadowObject) {
@@ -82,7 +88,7 @@ RGBColor Camera::BlinPhong(const Object & object, Point3 position, Vector3 viewD
 	RGBColor ks = object.ks;
 	//高光指数
 	float p = 2.0;
-	RGBColor specular = (ks*irradiance)*powf(normal*half, p);
+	RGBColor specular = (ks*irradiance)*powf(std::max(normal*half,0.0f) , p);
 	return diffuse+specular;
 }
 

@@ -36,6 +36,13 @@ void RGBColor::Pow(float p)
 	mRGB[2] = powf(mRGB[2], p);
 }
 
+bool RGBColor::isBlack()
+{
+	if(mRGB[0]<=0 && mRGB[1] <= 0&& mRGB[2] <= 0)
+		return true;
+	return false;
+}
+
 RGBColor RGBColor::operator +( RGBColor &B) {
 	return RGBColor(mRGB[0] + B[0], mRGB[1] + B[1], mRGB[2] + B[2],mRGB[3]+B[3]);
 }

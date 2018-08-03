@@ -21,13 +21,14 @@ int main() {
 
 	AmbientLight ambient(RGBColor(0.5, 0.5, 0.5, 0.0));
 	Vector3 direction;
-	direction[0] = 0; direction[1] = 0; direction[1] = 1;
+	direction[0] = 0; direction[1] = 0; direction[2] = 1;
 	DirectedLight dirLight(RGBColor(0.8, 0.8, 0.8, 0.0), direction);
 
 	Scene scene;
 	scene.mObjects.push_back(&sphere1);
 	scene.mObjects.push_back(&sphere2);
 	scene.mDirLight = dirLight;
+	scene.mAmbient = ambient;
 
 	camera.Render(scene);
 

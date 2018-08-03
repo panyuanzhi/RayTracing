@@ -15,6 +15,7 @@ public:
 	float& const operator  [](int i);
 	void saturate();
 	void Pow(float p);
+	bool isBlack();
 private:
 	float mRGB[4];
 };
