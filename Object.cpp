@@ -35,7 +35,8 @@ float Sphere::Hit(Ray ray)
 Vector3 Sphere::GetNormal(Point3 position) const
 {
 	Vector3 normal = position - mCenter;
-	return normal.Normalize();
+	normal.Normalize();
+	return normal;
 }
 
 Plane::Plane(Point3 point, Vector3 normal) {

@@ -9,7 +9,7 @@ public:
 	void SetBounce(int bounce);
 private:
 	RGBColor RayTracing(Ray ray, const Scene &scene, int bounce);
-	RGBColor BlinPhong(const Object &object, Point3 position, Vector3 viewDir, const Light &light);
+	RGBColor BlinPhong(const Object &object, Point3 position, Vector3 viewDir, Vector3 l,RGBColor irradiance);
 	void DrawPixel(int x, int y, RGBColor color);
 	void InitColorBuffer();
 	void WriteColorBuffer();

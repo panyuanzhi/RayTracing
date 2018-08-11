@@ -66,7 +66,11 @@ RGBColor Camera::RayTracing(Ray ray, const Scene & scene, int bounce)
 				return color;
 			}
 			else {
-				color = color + BlinPhong(*object, position, ray.GetDirection(), scene.mDirLight);
+				Vector3 viewDir = mEye - position;
+				Vector3 lightDir = scene.mDirLight.GetDirection(position);
+				Vector3 l;
+				l[0] = -lightDir[0]; l[1] = -lightDir[1]; l[2] = -lightDir[2];
+				color = color + BlinPhong(*object, position, viewDir, l, scene.mDirLight.GetIrradiance(position));
 				return color;
 			}
 		}
@@ -77,12 +81,10 @@ RGBColor Camera::RayTracing(Ray ray, const Scene & scene, int bounce)
 	
 }
 
-RGBColor Camera::BlinPhong(const Object & object, Point3 position, Vector3 viewDir, const Light & light)
+RGBColor Camera::BlinPhong(const Object & object, Point3 position, Vector3 viewDir, Vector3 l, RGBColor irradiance)
 {
-	Vector3 l = light.GetDirection(position);
 	Vector3 half = (l + viewDir).Normalize();
 	Vector3 normal = object.GetNormal(position);
-	RGBColor irradiance = light.GetIrradiance(position);
 	RGBColor kd = object.kd;
 	RGBColor diffuse = (kd*irradiance)*std::max(0.0f, l*normal);
 	RGBColor ks = object.ks;
